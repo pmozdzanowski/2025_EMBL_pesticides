@@ -2,7 +2,7 @@
   "python.linting.enabled": true,
   "python.linting.ruffEnabled": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.ruff": true
+    "source.fixAll.ruff": "explicit"
   },
   "cSpell.enable": false
 }
