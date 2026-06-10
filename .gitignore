@@ -211,6 +211,8 @@ __marimo__/
 invitrodb/
 
 # logs
-log
-.err
-.out
+logs/
+log/
+*.log
+*.out
+*.err
