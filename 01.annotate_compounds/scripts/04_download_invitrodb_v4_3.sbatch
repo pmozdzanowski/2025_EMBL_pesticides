@@ -10,7 +10,7 @@ set -euo pipefail
 
 module load mysql
 
-TARGET_DIR="${SLURM_SUBMIT_DIR}/data/invitrodb"
+TARGET_DIR="../data/invitrodb"
 DB_NAME="invitrodb_v4_3"
 
 MYSQL_DIR="$TARGET_DIR/mysql_data_v4_3"
