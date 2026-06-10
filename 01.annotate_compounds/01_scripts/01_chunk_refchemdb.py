@@ -3,13 +3,16 @@ Splits RefChemDB dataset into smaller CSV chunks based on dsstox_substance_id fo
 """
 
 import math
+from pathlib import Path
 
 import polars as pl
 
 
 def main():
     # Process RefChemDB
-    refchemdb = pl.read_csv("../data/refchemdb/refchemdb.csv").select("dsstox_substance_id").unique()
+    refchemdb = pl.read_csv("../00_inputs/refchemdb/refchemdb.csv").select("dsstox_substance_id").unique()
+    output_dir = Path("../02_outputs/refchemdb/input_comptoxdb")
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     chunk_size = 10_000
     total_rows = refchemdb.height
@@ -19,7 +22,7 @@ def main():
         start = i * chunk_size
         end = min(start + chunk_size, total_rows)
         chunk = refchemdb.slice(start, end - start)
-        chunk.write_csv(f"../data/refchemdb/input_comptoxdb/refchemdb_dtxsid_{i + 1}.csv")
+        chunk.write_csv(output_dir / f"refchemdb_dtxsid_{i + 1}.csv")
 
 
 if __name__ == "__main__":

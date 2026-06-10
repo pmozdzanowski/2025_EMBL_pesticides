@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TARGET_DIR="../data/invitrodb"
+TARGET_DIR="../02_outputs/invitrodb"
 
 mkdir -p "$TARGET_DIR"
 
