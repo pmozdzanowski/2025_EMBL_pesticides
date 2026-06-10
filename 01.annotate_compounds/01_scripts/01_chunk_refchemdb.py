@@ -7,11 +7,13 @@ from pathlib import Path
 
 import polars as pl
 
+MODULE_DIR = Path(__file__).resolve().parents[1]
+
 
 def main():
     # Process RefChemDB
-    refchemdb = pl.read_csv("../00_inputs/refchemdb/refchemdb.csv").select("dsstox_substance_id").unique()
-    output_dir = Path("../02_outputs/refchemdb/input_comptoxdb")
+    refchemdb = pl.read_csv(MODULE_DIR / "00_inputs/refchemdb/refchemdb.csv").select("dsstox_substance_id").unique()
+    output_dir = MODULE_DIR / "02_outputs/refchemdb/input_comptoxdb"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     chunk_size = 10_000

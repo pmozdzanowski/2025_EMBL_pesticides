@@ -1,6 +1,8 @@
 #!/bin/bash
 
-TARGET_DIR="../02_outputs/invitrodb"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MODULE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+TARGET_DIR="$MODULE_DIR/02_outputs/invitrodb"
 
 mkdir -p "$TARGET_DIR"
 

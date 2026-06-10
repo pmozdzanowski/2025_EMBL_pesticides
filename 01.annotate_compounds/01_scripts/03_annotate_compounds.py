@@ -6,20 +6,22 @@ from pathlib import Path
 
 import polars as pl
 
+MODULE_DIR = Path(__file__).resolve().parents[1]
+
 
 def main():
     support = 7
-    output_dir = Path("../02_outputs")
+    output_dir = MODULE_DIR / "02_outputs"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Add standardized inchikey to refchemdb
     refchemdb_ids = (
-        pl.read_csv("../02_outputs/refchemdb/standardized_refchemdb.csv")
+        pl.read_csv(output_dir / "refchemdb/standardized_refchemdb.csv")
         .select(["InChIKey_standardized", "DTXSID"])
         .rename({"InChIKey_standardized": "INCHIKEY"})
     )
 
-    refchemdb = pl.read_csv("../00_inputs/refchemdb/refchemdb.csv").rename({"dsstox_substance_id": "DTXSID"})
+    refchemdb = pl.read_csv(MODULE_DIR / "00_inputs/refchemdb/refchemdb.csv").rename({"dsstox_substance_id": "DTXSID"})
 
     refchemdb = refchemdb.join(refchemdb_ids, on="DTXSID").filter(pl.col("support") >= support)
 
@@ -27,13 +29,13 @@ def main():
 
     # Process drugs and pesticides
     pesticides = (
-        pl.read_csv("../02_outputs/standardized_pesticides.csv", infer_schema_length=10000)
+        pl.read_csv(output_dir / "standardized_pesticides.csv", infer_schema_length=10000)
         .select(["InChIKey_standardized", "Descriptive name", "CHEMBL_ID", "ChEBI", "Pesticide type"])
         .rename({"InChIKey_standardized": "INCHIKEY", "Descriptive name": "name"})
     )
 
     drugs = (
-        pl.read_csv("../02_outputs/standardized_drugs.csv", infer_schema_length=10000)
+        pl.read_csv(output_dir / "standardized_drugs.csv", infer_schema_length=10000)
         .select(["InChIKey_standardized", "Name", "Target"])
         .rename({"InChIKey_standardized": "INCHIKEY", "Name": "name", "Target": "orig_target_ann"})
     )

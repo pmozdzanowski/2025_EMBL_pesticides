@@ -7,31 +7,33 @@ from pathlib import Path
 import pandas as pd
 from standardize_smiles import StandardizeMolecule
 
+MODULE_DIR = Path(__file__).resolve().parents[1]
+
 
 def main():
     num_cpus = 8
-    output_dir = Path("../02_outputs")
+    output_dir = MODULE_DIR / "02_outputs"
     output_dir.mkdir(parents=True, exist_ok=True)
     (output_dir / "refchemdb").mkdir(parents=True, exist_ok=True)
 
     # Read in compound lists
-    pesticides = pd.read_csv("../00_inputs/pesticides.csv")
+    pesticides = pd.read_csv(MODULE_DIR / "00_inputs/pesticides.csv")
 
     # Read in drugs
-    drugs = pd.read_csv("../00_inputs/drugs.csv")
+    drugs = pd.read_csv(MODULE_DIR / "00_inputs/drugs.csv")
     drugs = drugs.drop(columns=["SMILES"])
 
-    drug_smiles = pd.read_csv("../00_inputs/drugs_cas_to_smiles.csv")
+    drug_smiles = pd.read_csv(MODULE_DIR / "00_inputs/drugs_cas_to_smiles.csv")
     drug_smiles = drug_smiles[drug_smiles["SMILES"].notna() & (drug_smiles["SMILES"] != "")]
 
     drugs = drugs.merge(drug_smiles, on="CAS Number", how="inner")
 
     # Read in RefChemDB
     files = [
-        "../02_outputs/refchemdb/output_comptoxdb/dtxsid_smiles_1.csv",
-        "../02_outputs/refchemdb/output_comptoxdb/dtxsid_smiles_2.csv",
-        "../02_outputs/refchemdb/output_comptoxdb/dtxsid_smiles_3.csv",
-        "../02_outputs/refchemdb/output_comptoxdb/dtxsid_smiles_4.csv",
+        output_dir / "refchemdb/output_comptoxdb/dtxsid_smiles_1.csv",
+        output_dir / "refchemdb/output_comptoxdb/dtxsid_smiles_2.csv",
+        output_dir / "refchemdb/output_comptoxdb/dtxsid_smiles_3.csv",
+        output_dir / "refchemdb/output_comptoxdb/dtxsid_smiles_4.csv",
     ]
 
     # Read and concatenate
